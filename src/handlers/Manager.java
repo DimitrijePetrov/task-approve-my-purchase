@@ -8,6 +8,11 @@ import common.Type;
 public class Manager extends Approver {
     @Override
     public void approve(int id, double cost, Type type) {
+        if (cost <= 0) {
+            System.out.println("Invalid purchase with id " + id + " that costs " + cost + ": cost cannot be less than 0");
+            return;
+        }
+
         if (canApprove(id, cost, type)) {
             System.out.println("Manager approved purchase with id " + id + " that costs " + cost);
             return;
@@ -19,26 +24,28 @@ public class Manager extends Approver {
 
     @Override
     protected boolean canApprove(int id, double cost, Type type) {
-        boolean result = false;
+        double limit;
 
-        if (type == Type.CONSUMABLES && cost <= 300) {
-            result = true;
-            return result;
-        } else if (type == Type.CLERICAL && cost <= 500) {
-            result = false;
-            return result;
-        } else if (type == Type.GADGETS && cost <= 1000) {
-            result = true;
-            return result;
-        } else if (type == Type.GAMING && cost <= 2000) {
-            result = true;
-            return result;
-        } else if (type == Type.PC && cost <= 5000) {
-            result = true;
-            return result;
-        } else {
-            result = false;
-            return result;
+        switch(type) {
+            case CONSUMABLES:
+                limit = 300;
+                break;
+            case CLERICAL:
+                limit = 500;
+                break;
+            case GADGETS:
+                limit = 1000;
+                break;
+            case GAMING:
+                limit = 3000;
+                break;
+            case PC:
+                limit = 5000;
+                break;
+            default:
+                return false;
         }
+
+        return cost <= limit;
     }
 }

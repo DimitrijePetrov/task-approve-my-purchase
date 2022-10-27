@@ -20,48 +20,28 @@ public class Director extends Approver {
 
     @Override
     protected boolean canApprove(int id, double cost, Type type) {
-        boolean result = false;
+        double limit;
 
-        switch (type) {
+        switch(type) {
             case CONSUMABLES:
-                if (cost < 500) {
-                    result = true;
-                    return result;
-                } else {
-                    break;
-                }
+                limit = 500;
+                break;
             case CLERICAL:
-                if (cost < 1000) {
-                    result = true;
-                    return result;
-                } else {
-                    break;
-                }
+                limit = 1000;
+                break;
             case GADGETS:
-                if (cost < 1500) {
-                    result = true;
-                    return result;
-                } else {
-                    break;
-                }
+                limit = 1500;
+                break;
             case GAMING:
-                if (cost < 3000) {
-                    result = true;
-                    return result;
-                } else {
-                    break;
-                }
+                limit = 3500;
+                break;
             case PC:
-                if (cost < 6000) {
-                    result = true;
-                    return result;
-                } else {
-                    break;
-                }
+                limit = 6000;
+                break;
             default:
-                result = false;
-                return result;
+                return false;
         }
-        return result;
+
+        return cost <= limit;
     }
 }
