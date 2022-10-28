@@ -1,47 +1,37 @@
 package handlers;
 
-import common.Type;
-
 
 /**
  * //TODO - Implement approval implementation for VicePresident level
  */
-public class VicePresident extends Approver{
+public class VicePresident extends LimitedApprover {
     @Override
-    public void approve(int id, double cost, Type type) {
-        if (canApprove(id, cost, type)) {
-            System.out.println("Vice President approved purchase with id " + id + " that costs " + cost);
-            return;
-        }
-
-        System.out.println("Purchase with id " + id + " needs approval from higher position than Vice President.");
-        next.approve(id, cost, type);
+    protected String getName() {
+        return "Vice President";
     }
 
     @Override
-    protected boolean canApprove(int id, double cost, Type type) {
-        double limit;
+    protected double getConsumablesLimit() {
+        return 700;
+    }
 
-        switch(type) {
-            case CONSUMABLES:
-                limit = 700;
-                break;
-            case CLERICAL:
-                limit = 1500;
-                break;
-            case GADGETS:
-                limit = 2000;
-                break;
-            case GAMING:
-                limit = 4500;
-                break;
-            case PC:
-                limit = 6500;
-                break;
-            default:
-                return false;
-        }
+    @Override
+    protected double getClericalLimit() {
+        return 1500;
+    }
 
-        return cost <= limit;
+    @Override
+    protected double getGadgetsLimit() {
+        return 2000;
+    }
+
+    @Override
+    protected double getGamingLimit() {
+        return 4500;
+    }
+
+    @Override
+    protected double getPCLimit() {
+        return 6500;
     }
 }
