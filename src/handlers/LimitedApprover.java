@@ -1,36 +1,28 @@
 package handlers;
 
-import common.Type;
+import common.Request;
 
-public abstract class LimitedApprover extends Approver {
-    protected abstract String getName();
-    protected abstract double getConsumablesLimit();
-    protected abstract double getClericalLimit();
-    protected abstract double getGadgetsLimit();
-    protected abstract double getGamingLimit();
-    protected abstract double getPCLimit();
-
-    @Override
-    public void approve(int id, double cost, Type type) {
-        if (cost <= 0) {
-            System.out.println("Invalid purchase with id " + id + " that costs " + cost + ": cost cannot be less than 0");
+public abstract class LimitedApprover extends Approver {@Override
+    public void approve(Request request) {
+        if (request.getCost() <= 0) {
+            System.out.println("Invalid purchase with id " + request.getId() + " that costs " + request.getCost() + ": cost cannot be less than 0");
             return;
         }
 
-        if (canApprove(id, cost, type)) {
-            System.out.println(getName() + " approved purchase with id " + id + " that costs " + cost);
+        if (canApprove(request)) {
+            System.out.println(getName() + " approved purchase with id " + request.getId() + " that costs " + request.getCost());
             return;
         }
 
-        System.out.println("Purchase with id " + id + " needs approval from higher position than " + getName() + ".");
-        next.approve(id, cost, type);
+        System.out.println("Purchase with id " + request.getId() + " needs approval from higher position than " + getName() + ".");
+        next.approve(request);
     }
 
     @Override
-    protected boolean canApprove(int id, double cost, Type type) {
+    protected boolean canApprove(Request request) {
         double limit;
 
-        switch(type) {
+        switch(request.getType()) {
             case CONSUMABLES:
                 limit = getConsumablesLimit();
                 break;
@@ -50,6 +42,13 @@ public abstract class LimitedApprover extends Approver {
                 return false;
         }
 
-        return cost <= limit;
+        return request.getCost() <= limit;
     }
+
+    protected abstract String getName();
+    protected abstract double getConsumablesLimit();
+    protected abstract double getClericalLimit();
+    protected abstract double getGadgetsLimit();
+    protected abstract double getGamingLimit();
+    protected abstract double getPCLimit();
 }

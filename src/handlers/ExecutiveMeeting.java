@@ -1,5 +1,6 @@
 package handlers;
 
+import common.Request;
 import common.Type;
 
 /**
@@ -15,13 +16,12 @@ public class ExecutiveMeeting extends Approver {
     }
 
     @Override
-    public void approve(int id, double cost, Type type) {
-
-        System.out.println("Purchase with id " + id + " that costs " + cost + " requires an approval of executive meeting.");
+    public void approve(Request request) {
+        System.out.println("Purchase with id " + request.getId() + " that costs " + request.getCost() + " requires an approval of executive meeting.");
     }
 
     @Override
-    protected boolean canApprove(int id, double cost, Type type) {
+    protected boolean canApprove(Request request) {
         return false;
     }
 }
