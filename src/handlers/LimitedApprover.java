@@ -1,25 +1,27 @@
 package handlers;
 
-import common.Request;
+import common.PurchaseLogger;
+import common.PurchaseRequest;
 
-public abstract class LimitedApprover extends Approver {@Override
-    public void approve(Request request) {
+public abstract class LimitedApprover extends Approver {
+    @Override
+    public void approve(PurchaseRequest request) {
         if (request.getCost() <= 0) {
-            System.out.println("Invalid purchase with id " + request.getId() + " that costs " + request.getCost() + ": cost cannot be less than 0");
+            PurchaseLogger.logPurchaseInvalid(request.getId(), request.getCost());
             return;
         }
 
         if (canApprove(request)) {
-            System.out.println(getName() + " approved purchase with id " + request.getId() + " that costs " + request.getCost());
+            PurchaseLogger.logPurchaseApproved(getName(), request.getId(), request.getCost());
             return;
         }
 
-        System.out.println("Purchase with id " + request.getId() + " needs approval from higher position than " + getName() + ".");
+        PurchaseLogger.logPurchaseNotApproved(getName(), request.getId());
         next.approve(request);
     }
 
     @Override
-    protected boolean canApprove(Request request) {
+    protected boolean canApprove(PurchaseRequest request) {
         double limit;
 
         switch(request.getType()) {

@@ -1,7 +1,6 @@
 package handlers;
 
-import common.Request;
-import common.Type;
+import common.PurchaseRequest;
 
 /**
  * Used as a fallback in approval chain.
@@ -16,12 +15,12 @@ public class ExecutiveMeeting extends Approver {
     }
 
     @Override
-    public void approve(Request request) {
+    public void approve(PurchaseRequest request) {
         System.out.println("Purchase with id " + request.getId() + " that costs " + request.getCost() + " requires an approval of executive meeting.");
     }
 
     @Override
-    protected boolean canApprove(Request request) {
+    protected boolean canApprove(PurchaseRequest request) {
         return false;
     }
 }
